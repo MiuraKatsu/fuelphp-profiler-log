@@ -1,0 +1,49 @@
+--- ../../../core/classes/profiler.php	2013-03-28 15:42:33.000000000 +0900
++++ ../core/class/profiler.php	2013-05-20 22:49:48.000000000 +0900
+@@ -11,9 +11,11 @@
+ class Profiler
+ {
+ 
+-	protected static $profiler = null;
++	public static $profiler = null;
+ 
+-	protected static $query = null;
++	public static $query = null;
++
++	public static $display = false;
+ 
+ 	public static function init()
+ 	{
+@@ -42,7 +44,10 @@
+ 
+ 	public static function output()
+ 	{
+-		return static::$profiler ? static::$profiler->display(static::$profiler) : '';
++		if (static::$display)
++		{
++			return static::$profiler ? static::$profiler->display(static::$profiler) : '';
++		}
+ 	}
+ 
+ 	public static function start($dbname, $sql)
+@@ -79,4 +84,20 @@
+ 			memory_get_peak_usage() - FUEL_START_MEM
+ 		);
+ 	}
++
++	public static function get_output_data()
++	{
++		if(static::$profiler)
++		{
++			static::$profiler->db = static::$profiler;
++			static::$profiler->gatherConsoleData();
++			static::$profiler->gatherPathData();
++			static::$profiler->gatherFileData();
++			static::$profiler->gatherMemoryData();
++			static::$profiler->gatherQueryData();
++			static::$profiler->gatherSpeedData();
++
++			return static::$profiler->output;
++		}
++	}
+ }
