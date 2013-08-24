@@ -10,9 +10,10 @@ $profiler_conf = array(
 		//'logs',
 	),
 
-	'driver' => 'td',
+	'driver' => 'debug',
 
 	'drivers' => array(
+		'debug' => array(),
 		'td' => array(
 			'database' => 'default',
 			'host' => 'unix:///var/run/td-agent/td-agent.sock',

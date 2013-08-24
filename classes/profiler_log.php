@@ -1,6 +1,6 @@
-<?php namespace Fluentd;
+<?php 
 
-class Profiler
+class ProfilerLog
 {
 
 	public static $conf = array();
@@ -14,7 +14,7 @@ class Profiler
 		\Config::load('profiler', true);
 		static::$conf = \Config::get('profiler');
 		//regist shutdown event
-		\Event::register('shutdown','\Fluentd\Profiler_Td::shutdown');
+		\Event::register('shutdown','\ProfilerLog::shutdown');
 	}
 
 
@@ -27,24 +27,26 @@ class Profiler
 	public static function shutdown()
 	{
 		//var_dump(__FUNCTION__);
-		$output = null;
+		$output_data = null;
 		if(static::$conf['output']){
-			$output = \Profiler::get_output_data();
+			$output_data = \Profiler::get_output_data();
 		}
-		self::output($output);
+
+		if( empty(static::$conf['driver']))
+		{
+			throw new \FuelException('No log driver given or no default log driver set.');
+		}
+
+		$class = 'ProfilerLog\\'.ucfirst(static::$conf['driver']);
+
+		try{
+			return $class::output($output_data);
+		}catch (FuelException $e) {
+		}
 	}
 
-	public static function output($output = null){
-		
-		foreach(static::$conf['output_type'] as $_conf){
-			if(!$_conf){
-			 	unset($output[$_conf]);
-			}
-		}
-		unset($output['files']);
-		unset($output['queries']);
-		unset($output['logs']);
-		\Log::debug(print_r($output,true));
+	public static function output($output_data)
+	{
 	}
 
 }
