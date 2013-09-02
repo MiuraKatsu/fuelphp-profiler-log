@@ -10,27 +10,22 @@ class ProfilerLog
 	 */
 	public static function _init()
 	{
-		///var_dump(__FUNCTION__);
 		\Config::load('profiler', true);
 		static::$conf = \Config::get('profiler');
+
 		//regist shutdown event
 		\Event::register('shutdown','\ProfilerLog::shutdown');
 	}
 
 
-	public static function display()
+	public static function set_output()
 	{
-		//var_dump(__FUNCTION__);
-		\Profiler::$display = static::$conf['display'];
+		\Profiler::set_output(static::$conf['output']);
 	}
 
 	public static function shutdown()
 	{
-		//var_dump(__FUNCTION__);
-		$output_data = null;
-		if(static::$conf['output']){
-			$output_data = \Profiler::get_output_data();
-		}
+		$output_data = \Profiler::get_output_data();
 
 		if( empty(static::$conf['driver']))
 		{
@@ -45,8 +40,18 @@ class ProfilerLog
 		}
 	}
 
-	public static function output($output_data)
-	{
-	}
+	public static function output($output = null){
+		
+		
+		foreach(static::$conf['output_type'] as $_conf => $enable){
+			if(!$enable){
+			 	unset($output[$_conf]);
+			}
+		}
 
+		$session_id = \Session::key();
+		$output = array('session_id' => $session_id,'output_data'=>$output);
+
+		static::_write(print_r($output,true));
+	}
 }

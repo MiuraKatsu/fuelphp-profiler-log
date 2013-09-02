@@ -11,19 +11,19 @@ use \PhpQuickProfiler;
 class Profiler
 {
 
-	public static $profiler = null;
+	protected static $profiler = null;
 
-	public static $query = null;
-
-	public static $display = false;
+	protected static $query = null;
 
 	public static function init()
 	{
-		if ( ! \Fuel::$is_cli and ! static::$profiler)
+		if ( ! \Fuel::$is_cli and ! \Input::is_ajax() and ! static::$profiler)
 		{
 			static::$profiler = new PhpQuickProfiler(FUEL_START_TIME);
 			static::$profiler->queries = array();
 			static::$profiler->queryCount = 0;
+			static::mark(__METHOD__.' Start');
+			\Fuel::$profiling = true;
 		}
 	}
 
@@ -39,24 +39,22 @@ class Profiler
 
 	public static function console($text)
 	{
-		static::$profiler or Console::log($text);
+		static::$profiler and Console::log($text);
 	}
 
 	public static function output()
 	{
-		if (static::$display)
-		{
-			return static::$profiler ? static::$profiler->display(static::$profiler) : '';
-		}
+		return static::$profiler ? static::$profiler->display(static::$profiler) : '';
 	}
 
-	public static function start($dbname, $sql)
+	public static function start($dbname, $sql, $stacktrace = array())
 	{
 		if (static::$profiler)
 		{
 			static::$query = array(
 				'sql' => \Security::htmlentities($sql),
 				'time' => static::$profiler->getMicroTime(),
+				'stacktrace' => $stacktrace,
 			);
 			return true;
 		}
@@ -83,21 +81,5 @@ class Profiler
 			microtime(true) - FUEL_START_TIME,
 			memory_get_peak_usage() - FUEL_START_MEM
 		);
-	}
-
-	public static function get_output_data()
-	{
-		if(static::$profiler)
-		{
-			static::$profiler->db = static::$profiler;
-			static::$profiler->gatherConsoleData();
-			static::$profiler->gatherPathData();
-			static::$profiler->gatherFileData();
-			static::$profiler->gatherMemoryData();
-			static::$profiler->gatherQueryData();
-			static::$profiler->gatherSpeedData();
-
-			return static::$profiler->output;
-		}
 	}
 }
