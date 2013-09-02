@@ -15,6 +15,8 @@ class Profiler
 
 	protected static $query = null;
 
+	protected static $output = null;
+
 	public static function init()
 	{
 		if ( ! \Fuel::$is_cli and ! \Input::is_ajax() and ! static::$profiler)
@@ -44,7 +46,9 @@ class Profiler
 
 	public static function output()
 	{
-		return static::$profiler ? static::$profiler->display(static::$profiler) : '';
+		if(static::$output){
+			return static::$profiler ? static::$profiler->display(static::$profiler) : '';
+		}
 	}
 
 	public static function start($dbname, $sql, $stacktrace = array())
@@ -82,4 +86,26 @@ class Profiler
 			memory_get_peak_usage() - FUEL_START_MEM
 		);
 	}
+
+	public static function set_output($flag = null)
+	{
+		static::$output = $flag;
+	}
+
+	public static function get_output_data()
+	{
+		if(static::$profiler)
+		{
+			static::$profiler->db = static::$profiler;
+			static::$profiler->gatherConsoleData();
+			static::$profiler->gatherPathData();
+			static::$profiler->gatherFileData();
+			static::$profiler->gatherMemoryData();
+			static::$profiler->gatherQueryData();
+			static::$profiler->gatherSpeedData();
+
+			return static::$profiler->output;
+		}
+	}
+
 }
