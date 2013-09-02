@@ -2,14 +2,14 @@
 
 $profiler_conf = array(
 
-	'output'  => true,
+	'output'  => false,
 	'logging' => true,
 
 	'output_type' => array(
 		'logs'			=> true,
 		'paths'			=> true,
 		'pathTotals'	=> true,
-		'files'			=> true,
+		'files'			=> false,
 		'fileTotals'	=> true,
 		'memoryTotals'	=> true,
 		'queries'		=> true,
