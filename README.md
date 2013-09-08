@@ -1,6 +1,6 @@
 fuelphp-profiler-log
 ====================
-PHP Quick Profiler for Log Package.
+PHP Quick Profiler for Log Package.  
 fuelphp標準のPHP Quick Profilerのプロファイル情報をLog出力するpackageです。  
 
 Installation
