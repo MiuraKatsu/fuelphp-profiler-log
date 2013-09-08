@@ -1,28 +1,28 @@
 fuelphp-profiler-log
 ====================
 PHP Quick Profiler for Log Package.
-fuelphp$BI8=`$N(BPHP Quick Profiler$B$N%W%m%U%!%$%k>pJs$r(BLog$B=PNO$9$k(Bpackage$B$G$9!#(B  
+fuelphp標準のPHP Quick Profilerのプロファイル情報をLog出力するpackageです。  
 
 Installation
 ------
-+ `fuel/packages`$BG[2<$KE83+$7$^$9(B
++ `fuel/packages`配下に展開します
 
  `git clone -recursive git://github.com/MiuraKatsu/fuelphp-profiler-log.git profiler-log`
 
-+ `core/classes/profiler.php`$B$r(B`packages/core/classes/profiler.php`$B$H:9$7BX$($^$9!#(B
++ `core/classes/profiler.php`を`packages/core/classes/profiler.php`と差し替えます。
 
  `patch -u core/classes/profiler.php < packages/profiler-log/patch/profiler.patch`
 
-+ `config/profiler.php`$B$r@_Dj$7$^$9!#(B
++ `config/profiler.php`を設定します。
 
 Configration
 ------
-$B2hLLI=<($9$k$+$I$&$+$H%m%.%s%0$9$k$+$I$&$+(B
+画面表示するかどうかとロギングするかどうか
 
 	'output'  => false,
 	'logging' => true,
 
-$B=PNO$9$k(Btype$B$rA*Br$G$-$^$9!#(B
+出力するtypeを選択できます。
 
 	'output_type' => array(
 		'logs'			=> true,
@@ -37,7 +37,7 @@ Configration
 	),
 
 
-$B%i%$%;%s%9(B
+ライセンス
 ----------
 Copyright &copy; 2013 @MiuraKatsu
 Licensed under the [Apache License, Version 2.0][Apache]
