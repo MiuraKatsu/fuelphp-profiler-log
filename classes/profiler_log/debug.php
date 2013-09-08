@@ -3,9 +3,9 @@
 class Debug extends \ProfilerLog
 {
 
-	public static function _write($str)
+	public static function _write($output)
 	{
-		\Log::debug($str);
+		\Log::debug(print_r($output,true));
 	}
 
 }

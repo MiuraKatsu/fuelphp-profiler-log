@@ -52,6 +52,6 @@ class ProfilerLog
 		$session_id = \Session::key();
 		$output = array('session_id' => $session_id,'output_data'=>$output);
 
-		static::_write(print_r($output,true));
+		static::_write($output);
 	}
 }
